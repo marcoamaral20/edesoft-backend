@@ -1,3 +1,4 @@
+import os
 import boto3
 import pandas as pd
 import re
@@ -6,8 +7,8 @@ import random
 from datetime import datetime
 
 def get_file(event):
-    bucket_name = 'edesoft'
-    object_key = 'arquivo_exemplo.csv'
+    bucket_name = os.environ.get('bucket_name')
+    object_key = os.environ.get('object_key')
     s3 = boto3.client('s3')
     
     object = s3.get_object(Bucket=bucket_name, Key=object_key)
@@ -44,10 +45,10 @@ def extracted_data(event):
     return df
     
 def connection_mysql():
-    rds_endpoint  = "database-1.c5wkjj4xux3h.sa-east-1.rds.amazonaws.com"
-    username = "marcoamaral"
-    password = "021851ma"
-    db_name = "database-1" 
+    rds_endpoint  = os.environ.get('rds-endpoint')
+    username = os.environ.get('user')
+    password = os.environ.get('password')
+    db_name = os.environ.get('database-1')
     conn = None
     try:
         conn = pymysql.connect(host=rds_endpoint, user=username, passwd=password, db=db_name)
